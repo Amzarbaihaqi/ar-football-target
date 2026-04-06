@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body { margin: 0; overflow: hidden; }
+
+/* Kamera */
+#camera {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Kawasan gol */
+#goal {
+  position: fixed;
+  top: 20%;
+  left: 10%;
+  width: 80%;
+  height: 60%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+/* Target */
+.target {
+  border: 2px solid white;
+  opacity: 0.6;
+}
+
+/* Warna */
+.t1 { background: red; }
+.t2 { background: yellow; }
+.t3 { background: red; }
+.t4 { background: yellow; }
+.t5 { background: green; }
+.t6 { background: yellow; }
+
+/* Score */
+#scoreBoard {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background: black;
+  color: white;
+  padding: 10px;
+}
+
+/* Flash */
+#flash {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: green;
+  opacity: 0;
+}
+</style>
+</head>
+
+<body>
+
+<video id="camera" autoplay playsinline></video>
+
+<div id="goal">
+  <div class="target t1" ontouchstart="goal(5)" onclick="goal(5)"></div>
+  <div class="target t2" ontouchstart="goal(3)" onclick="goal(3)"></div>
+  <div class="target t3" ontouchstart="goal(5)" onclick="goal(5)"></div>
+
+  <div class="target t4" ontouchstart="goal(3)" onclick="goal(3)"></div>
+  <div class="target t5" ontouchstart="goal(1)" onclick="goal(1)"></div>
+  <div class="target t6" ontouchstart="goal(3)" onclick="goal(3)"></div>
+</div>
+
+<div id="scoreBoard">
+  Score: <span id="score">0</span>
+</div>
+
+<div id="flash"></div>
+
+<audio id="sound" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
+
+<script>
+let score = 0;
+
+navigator.mediaDevices.getUserMedia({
+  video: { facingMode: "environment" }
+})
+.then(stream => {
+  document.getElementById("camera").srcObject = stream;
+})
+.catch(err => {
+  alert("Sila benarkan kamera");
+});
+
+function goal(points){
+  score += points;
+  document.getElementById("score").innerText = score;
+
+  document.getElementById("sound").play();
+
+  let flash = document.getElementById("flash");
+  flash.style.opacity = 0.5;
+
+  setTimeout(() => {
+    flash.style.opacity = 0;
+  }, 200);
+}
+</script>
+
+</body>
+</html>
